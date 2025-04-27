@@ -9,13 +9,20 @@ import kr.hqservice.framework.netty.packet.extension.writeUUID
 import java.util.UUID
 
 class ChatPacket(
+    var sender: UUID,
     var messageJson: String,
-    var receivers: Set<UUID>
+    var receivers: List<UUID>,
+    var logging: Boolean,
+    var whisper: Boolean
 ) : Packet() {
     override fun read(buf: ByteBuf) {
+        logging = buf.readBoolean()
+        whisper = buf.readBoolean()
+
+        sender = buf.readUUID()
         messageJson = buf.readString()
         val size = buf.readInt()
-        receivers = mutableSetOf<UUID>().apply {
+        receivers = mutableListOf<UUID>().apply {
             repeat(size) {
                 add(buf.readUUID())
             }
@@ -23,6 +30,10 @@ class ChatPacket(
     }
 
     override fun write(buf: ByteBuf) {
+        buf.writeBoolean(logging)
+        buf.writeBoolean(whisper)
+
+        buf.writeUUID(sender)
         buf.writeString(messageJson)
         buf.writeInt(receivers.size)
         receivers.forEach {

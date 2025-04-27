@@ -17,7 +17,7 @@ class ChatPacketHandler(
         nettyServer.registerOuterPacket(ChatPacket::class)
         nettyServer.registerInnerPacket(ChatPacket::class) { packet , _ ->
             kotlin.runCatching {
-                chatServiceImpl.sendChat(packet.receivers, JSONComponentSerializer.json().deserialize(packet.messageJson), true)
+                chatServiceImpl.sendChat(packet.sender, packet.receivers, JSONComponentSerializer.json().deserialize(packet.messageJson), packet.logging, packet.whisper)
             }.onFailure {
                 it.printStackTrace()
             }

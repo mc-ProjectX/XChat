@@ -13,11 +13,11 @@ interface ChatService {
 
     fun getChatModes(): List<ChatMode>
 
-    fun sendChat(receiverIds: Set<UUID>, chat: String, format: ChatFormat, sender: String = "")
+    fun sendChat(receiverIds: List<UUID>, chat: String, format: ChatFormat, sender: String = "", logging: Boolean = true)
 
-    fun sendChat(receiverIds: Set<UUID>, chat: Component, format: ChatFormat, sender: String = "")
+    fun sendChat(receiverIds: List<UUID>, chat: Component, format: ChatFormat, sender: String = "", logging: Boolean = true)
 
-    fun sendChat(receiverIds: Set<UUID>, chat: String, format: ChatFormat, sender: XPlayer)
+    fun sendChat(receiverIds: List<UUID>, chat: String, format: ChatFormat, sender: XPlayer, logging: Boolean = true)
 
-    fun sendChat(receiverIds: Set<UUID>, chat: Component, format: ChatFormat, sender: XPlayer)
+    fun sendChat(receiverIds: List<UUID>, chat: Component, format: ChatFormat, sender: XPlayer, logging: Boolean = true)
 }

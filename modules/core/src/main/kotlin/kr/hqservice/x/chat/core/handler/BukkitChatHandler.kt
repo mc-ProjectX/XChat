@@ -26,6 +26,7 @@ class BukkitChatHandler(
 
         val chatData = ChatDataImpl(user, event.message(), receivers)
         val formattedChat = user.getCurrentChatMode().getFormat().format(chatData)
-        chatService.sendChat(receivers.map(XPlayer::getUniqueId).toSet(), formattedChat, false)
+
+        chatService.sendChat(event.player.uniqueId, receivers.map(XPlayer::getUniqueId), formattedChat, logging = true, user.getCurrentChatMode().getFormat())
     }
 }

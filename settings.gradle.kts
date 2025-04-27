@@ -19,7 +19,6 @@ dependencyResolutionManagement {
         create("libs") {
             library("spigot-api", "org.spigotmc:spigot-api:${getProperty("spigotVersion")}")
             library("paper-api", "io.papermc.paper:paper-api:${getProperty("spigotVersion")}")
-
         }
         create("framework") {
             library("core", "kr.hqservice:hqframework-bukkit-core:${getProperty("hqFrameworkVersion")}")
@@ -28,6 +27,9 @@ dependencyResolutionManagement {
             library("inventory", "kr.hqservice:hqframework-bukkit-inventory:${getProperty("hqFrameworkVersion")}")
             library("database", "kr.hqservice:hqframework-bukkit-database:${getProperty("hqFrameworkVersion")}")
             library("scheduler", "kr.hqservice:hqframework-bukkit-scheduler:${getProperty("hqFrameworkVersion")}")
+        }
+        create("projectX") {
+            library("core", "kr.hqservice.x:xcore:${getProperty("xCoreVersion")}")
         }
     }
 }

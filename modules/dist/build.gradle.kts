@@ -5,10 +5,10 @@ plugins {
 }
 
 bukkitResourceGenerator {
-    main = "kr.hqservice."
+    main = "kr.hqservice.x.chat.XChatPlugin"
     name = "${extra["projectName"]}"
     apiVersion = "1.13"
-    depend = listOf("HQFramework")
+    depend = listOf("HQFramework", "XCore")
     libraries = excludedRuntimeDependencies()
 }
 

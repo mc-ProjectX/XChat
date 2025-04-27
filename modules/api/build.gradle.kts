@@ -5,5 +5,8 @@ plugins {
 
 dependencies {
     compileOnly(libs.paper.api)
+
     compileOnly(framework.core)
+
+    compileOnly(projectX.core)
 }

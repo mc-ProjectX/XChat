@@ -2,45 +2,31 @@ package kr.hqservice.x.chat.core.service
 
 import kr.hqservice.framework.bukkit.core.extension.colorize
 import kr.hqservice.framework.global.core.component.Service
-import kr.hqservice.framework.netty.api.PacketSender
 import kr.hqservice.x.chat.api.ChatData
 import kr.hqservice.x.chat.api.ChatFormat
 import kr.hqservice.x.chat.api.ChatMode
 import kr.hqservice.x.chat.api.ChatSender
-import kr.hqservice.x.chat.api.format.WhisperReceiverFormat
-import kr.hqservice.x.chat.api.format.WhisperSenderFormat
+import kr.hqservice.x.chat.api.format.*
 import kr.hqservice.x.chat.api.service.ChatService
 import kr.hqservice.x.chat.core.ChatSenderImpl
 import kr.hqservice.x.chat.core.component.registry.ChatModeComponentRegistry
 import kr.hqservice.x.chat.core.database.service.PlayerChatModeService
-import kr.hqservice.x.chat.core.network.packet.ChatPacket
 import kr.hqservice.x.core.api.XPlayer
 import kr.hqservice.x.core.api.service.XCoreService
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.json.JSONComponentSerializer
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import net.md_5.bungee.api.ChatColor
-import org.bukkit.Server
 import org.bukkit.entity.Player
 import java.util.*
-import java.util.logging.Logger
 
 @Service
 class ChatServiceImpl(
-    private val server: Server,
-    private val logger: Logger,
-    private val packetSender: PacketSender,
     private val xCoreService: XCoreService,
 
     private val chatModeService: PlayerChatModeService,
-    private val chatModeComponentRegistry: ChatModeComponentRegistry
+    private val chatModeComponentRegistry: ChatModeComponentRegistry,
+    private val chatSendService: ChatSendService
 ) : ChatService {
-    private val whisperSenderIds = mutableMapOf<UUID, UUID>()
     private val systemId = UUID.randomUUID()
-
-    fun getWhisperSenderId(playerId: UUID): UUID? {
-        return whisperSenderIds[playerId]
-    }
 
     override fun setChatMode(userId: UUID, chatMode: ChatMode) {
         val modeId = chatMode.getId()
@@ -58,22 +44,22 @@ class ChatServiceImpl(
 
     override fun sendChat(receiverIds: List<UUID>, chat: String, format: ChatFormat, sender: String, logging: Boolean) {
         val data = wrapChatData(sender, chat, Component.text(""), false, receiverIds)
-        sendChat(receiverIds, data, format, logging)
+        chatSendService.sendChat(receiverIds, data, format, logging)
     }
 
     override fun sendChat(receiverIds: List<UUID>, chat: Component, format: ChatFormat, sender: String, logging: Boolean) {
         val data = wrapChatData(sender, "", chat, true, receiverIds)
-        sendChat(receiverIds, data, format, logging)
+        chatSendService.sendChat(receiverIds, data, format, logging)
     }
 
     override fun sendChat(receiverIds: List<UUID>, chat: String, format: ChatFormat, sender: XPlayer, logging: Boolean) {
         val data = wrapChatData(sender, LegacyComponentSerializer.legacySection().deserialize(chat.colorize()), receiverIds)
-        sendChat(receiverIds, data, format, logging)
+        chatSendService.sendChat(receiverIds, data, format, logging)
     }
 
     override fun sendChat(receiverIds: List<UUID>, chat: Component, format: ChatFormat, sender: XPlayer, logging: Boolean) {
         val data = wrapChatData(sender, chat, receiverIds)
-        sendChat(receiverIds, data, format, logging)
+        chatSendService.sendChat(receiverIds, data, format, logging)
     }
 
     fun wrapChatUser(player: Player): ChatSender {
@@ -121,39 +107,6 @@ class ChatServiceImpl(
 
             override fun getReceivers(): List<XPlayer> {
                 return receiverIds.mapNotNull { xCoreService.getServer().findPlayer(it) }
-            }
-        }
-    }
-
-    private fun sendChat(receiverIds: List<UUID>, chatData: ChatData, format: ChatFormat, logging: Boolean) {
-        val formattedChat = format.format(chatData)
-        if (format is WhisperReceiverFormat) {
-            val senderFormattedChat = WhisperSenderFormat.format(chatData)
-            if (logging) logger.info(ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(senderFormattedChat)))
-            server.getPlayer(chatData.getSender().getUniqueId())?.sendMessage(senderFormattedChat)
-        }
-
-        sendChat(chatData.getSender().getUniqueId(), receiverIds, formattedChat, logging, format)
-    }
-
-    fun sendChat(sender: UUID, receiverIds: List<UUID>, formattedChat: Component, logging: Boolean, format: ChatFormat) {
-        val packet = ChatPacket(sender, JSONComponentSerializer.json().serialize(formattedChat), receiverIds, logging, format is WhisperReceiverFormat)
-        packetSender.sendPacketAll(packet)
-    }
-
-    fun sendChat(sender: UUID, receiverIds: List<UUID>, formattedChat: Component, logging: Boolean, whisper: Boolean) {
-        if (receiverIds.isEmpty()) server.broadcast(formattedChat)
-        else {
-            val receiverPlayers = receiverIds.mapNotNull(server::getPlayer)
-            if (receiverPlayers.isNotEmpty()) {
-                if (logging) logger.info(ChatColor.stripColor(LegacyComponentSerializer.legacySection().serialize(formattedChat)))
-                receiverPlayers.forEach { player ->
-                    if (player.isOnline) {
-                        if (whisper && receiverIds.first() == player.uniqueId)
-                            whisperSenderIds[player.uniqueId] = sender
-                        player.sendMessage(formattedChat)
-                    }
-                }
             }
         }
     }

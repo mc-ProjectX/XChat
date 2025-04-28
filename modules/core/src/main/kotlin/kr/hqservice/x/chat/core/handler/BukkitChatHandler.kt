@@ -5,6 +5,7 @@ import kr.hqservice.framework.bukkit.core.listener.HandleOrder
 import kr.hqservice.framework.bukkit.core.listener.Listener
 import kr.hqservice.framework.bukkit.core.listener.Subscribe
 import kr.hqservice.x.chat.core.ChatDataImpl
+import kr.hqservice.x.chat.core.service.ChatSendService
 import kr.hqservice.x.chat.core.service.ChatServiceImpl
 import kr.hqservice.x.core.api.XPlayer
 import kr.hqservice.x.core.api.service.XCoreService
@@ -12,7 +13,8 @@ import kr.hqservice.x.core.api.service.XCoreService
 @Listener
 class BukkitChatHandler(
     private val xCoreService: XCoreService,
-    private val chatService: ChatServiceImpl
+    private val chatService: ChatServiceImpl,
+    private val chatSendService: ChatSendService
 ) {
     @Subscribe(handleOrder = HandleOrder.LAST)
     fun onChat(event: AsyncChatEvent) {
@@ -27,6 +29,6 @@ class BukkitChatHandler(
         val chatData = ChatDataImpl(user, event.message(), receivers)
         val formattedChat = user.getCurrentChatMode().getFormat().format(chatData)
 
-        chatService.sendChat(event.player.uniqueId, receivers.map(XPlayer::getUniqueId), formattedChat, logging = true, user.getCurrentChatMode().getFormat())
+        chatSendService.sendChat(event.player.uniqueId, receivers.map(XPlayer::getUniqueId), formattedChat, logging = true, user.getCurrentChatMode().getFormat())
     }
 }

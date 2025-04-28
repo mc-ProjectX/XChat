@@ -1,13 +1,12 @@
 package kr.hqservice.x.chat.api.format
 
 import kr.hqservice.x.chat.api.ChatData
-import kr.hqservice.x.chat.api.ChatFormat
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 
-object WhisperSenderFormat : ChatFormat {
+data object WhisperSenderFormat : SystemFormat {
     private val WHISPER_MESSAGE_STYLE = Style.style(
         TextColor.color(0xadffe2),
         TextDecoration.ITALIC.withState(false)
@@ -19,5 +18,9 @@ object WhisperSenderFormat : ChatFormat {
         base.append(chatData.getMessage())
         base.style(WHISPER_MESSAGE_STYLE)
         return base.build()
+    }
+
+    override fun getSystemId(): Int {
+        return -5
     }
 }

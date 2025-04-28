@@ -1,13 +1,12 @@
 package kr.hqservice.x.chat.api.format
 
 import kr.hqservice.x.chat.api.ChatData
-import kr.hqservice.x.chat.api.ChatFormat
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 
-object DefaultChatFormat : ChatFormat {
+data object DefaultChatFormat : SystemFormat {
     private val DEFAULT_STYLE = Style.style(
         TextColor.color(0xffffff),
         TextDecoration.ITALIC.withState(false)
@@ -20,5 +19,9 @@ object DefaultChatFormat : ChatFormat {
         base.append(chatData.getMessage())
         base.style(DEFAULT_STYLE)
         return base.build()
+    }
+
+    override fun getSystemId(): Int {
+        return -1
     }
 }

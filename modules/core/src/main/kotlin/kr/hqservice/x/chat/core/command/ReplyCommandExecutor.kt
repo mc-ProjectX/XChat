@@ -3,6 +3,7 @@ package kr.hqservice.x.chat.core.command
 import kr.hqservice.framework.global.core.component.Bean
 import kr.hqservice.x.chat.api.format.ErrorFormat
 import kr.hqservice.x.chat.api.format.WhisperReceiverFormat
+import kr.hqservice.x.chat.core.service.ChatSendService
 import kr.hqservice.x.chat.core.service.ChatServiceImpl
 import kr.hqservice.x.core.api.service.XCoreService
 import org.bukkit.command.Command
@@ -13,7 +14,8 @@ import org.bukkit.entity.Player
 @Bean
 class ReplyCommandExecutor(
     private val xCoreService: XCoreService,
-    private val xChatService: ChatServiceImpl
+    private val xChatService: ChatServiceImpl,
+    private val xChatSendService: ChatSendService
 ) : TabExecutor {
     override fun onTabComplete(
         p0: CommandSender,
@@ -30,7 +32,7 @@ class ReplyCommandExecutor(
         if (args.isEmpty()) {
             xChatService.sendChat(listOf(sender.uniqueId), "메세지를 입력해주세요.", ErrorFormat, logging = false)
         } else {
-            val target = xChatService.getWhisperSenderId(sender.uniqueId)
+            val target = xChatSendService.getWhisperSenderId(sender.uniqueId)
             if (target == null) {
                 xChatService.sendChat(listOf(sender.uniqueId), "답장을 보낼 대상이 없습니다.", ErrorFormat, logging = false)
                 return true
@@ -43,7 +45,7 @@ class ReplyCommandExecutor(
                     WhisperReceiverFormat,
                     xCoreService.getServer().findPlayer(sender.uniqueId)!!, false
                 )
-            } else xChatService.sendChat(listOf(sender.uniqueId), "답장을 보낼 대상이 없습니다.", ErrorFormat)
+            } else xChatService.sendChat(listOf(sender.uniqueId), "답장을 보낼 대상이 없습니다.", ErrorFormat, logging = false)
         }
 
         return true

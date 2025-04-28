@@ -13,11 +13,13 @@ class ChatPacket(
     var messageJson: String,
     var receivers: List<UUID>,
     var logging: Boolean,
-    var whisper: Boolean
+    var whisper: Boolean,
+    var componentId: Int
 ) : Packet() {
     override fun read(buf: ByteBuf) {
         logging = buf.readBoolean()
         whisper = buf.readBoolean()
+        componentId = buf.readInt()
 
         sender = buf.readUUID()
         messageJson = buf.readString()
@@ -32,6 +34,7 @@ class ChatPacket(
     override fun write(buf: ByteBuf) {
         buf.writeBoolean(logging)
         buf.writeBoolean(whisper)
+        buf.writeInt(componentId)
 
         buf.writeUUID(sender)
         buf.writeString(messageJson)

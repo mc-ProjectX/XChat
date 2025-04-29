@@ -23,10 +23,10 @@ class XChatServiceImpl(
     private val chatModeComponentRegistry: ChatModeComponentRegistry
 ) : XChatService {
     private val consoleId = UUID.randomUUID()
-    private val consoleSender = XChatSenderImpl(consoleId, "SYSTEM")
+    private val consoleSender = XChatSenderImpl(consoleId, "SYSTEM", "console")
 
     override fun getConsoleSender(label: String): XChatSender {
-        return if (label.isNotEmpty()) XChatSenderImpl(consoleId, label) else consoleSender
+        return if (label.isNotEmpty()) XChatSenderImpl(consoleId, label, "console") else consoleSender
     }
 
     override fun findChatMode(modeId: String): XChatMode? {
@@ -59,13 +59,13 @@ class XChatServiceImpl(
 
     override fun sendChat(targetId: UUID?, senderId: UUID, chat: String, xChatMode: XChatMode, logging: Boolean): Boolean {
         val xPlayer = xCoreService.getServer().findPlayer(senderId) ?: return false
-        val chatSender = XChatSenderImpl(xPlayer.getUniqueId(), xPlayer.getDisplayName())
+        val chatSender = XChatSenderImpl(xPlayer.getUniqueId(), xPlayer.getDisplayName(), xPlayer.getName())
         return sendChat(targetId, chatSender, chat, xChatMode, logging)
     }
 
     override fun sendChat(targetId: UUID?, senderId: UUID, chat: Component, xChatMode: XChatMode, logging: Boolean): Boolean {
         val xPlayer = xCoreService.getServer().findPlayer(senderId) ?: return false
-        val chatSender = XChatSenderImpl(xPlayer.getUniqueId(), xPlayer.getDisplayName())
+        val chatSender = XChatSenderImpl(xPlayer.getUniqueId(), xPlayer.getDisplayName(), xPlayer.getName())
         return sendChat(targetId, chatSender, chat, xChatMode, logging)
     }
 

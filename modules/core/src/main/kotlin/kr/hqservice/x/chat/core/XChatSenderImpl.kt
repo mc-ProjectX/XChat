@@ -5,7 +5,8 @@ import java.util.*
 
 class XChatSenderImpl(
     private val uniqueId: UUID,
-    private val displayName: String
+    private val displayName: String,
+    private val originalName: String
 ) : XChatSender {
     override fun getUniqueId(): UUID {
         return uniqueId
@@ -13,5 +14,9 @@ class XChatSenderImpl(
 
     override fun getDisplayName(): String {
         return displayName
+    }
+
+    override fun getOriginalName(): String {
+        return originalName
     }
 }

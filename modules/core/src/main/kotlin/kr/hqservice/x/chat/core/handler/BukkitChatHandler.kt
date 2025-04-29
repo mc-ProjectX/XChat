@@ -17,7 +17,7 @@ class BukkitChatHandler(
     fun onChat(event: AsyncChatEvent) {
         event.isCancelled = true
 
-        val user = XChatSenderImpl(event.player.uniqueId, event.player.displayName)
+        val user = XChatSenderImpl(event.player.uniqueId, event.player.displayName, event.player.name)
         if (!chatService.sendChat(null, user, event.message(), userService.getCurrentChatMode(user.getUniqueId()))) {
             chatService.sendError(user.getUniqueId(), userService.getCurrentChatMode(user.getUniqueId()).permissionDeniedMessage())
         }

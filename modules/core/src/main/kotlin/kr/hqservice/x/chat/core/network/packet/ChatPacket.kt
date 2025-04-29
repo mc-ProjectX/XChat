@@ -22,6 +22,7 @@ class ChatPacket(
         mode = buf.readString()
         sender = XChatSenderImpl(
             buf.readUUID(),
+            buf.readString(),
             buf.readString()
         )
         singleReceiver = if (buf.readBoolean())
@@ -38,6 +39,7 @@ class ChatPacket(
         buf.writeString(mode)
         buf.writeUUID(sender.getUniqueId())
         buf.writeString(sender.getDisplayName())
+        buf.writeString(sender.getOriginalName())
 
         buf.writeBoolean(singleReceiver != null)
         singleReceiver?.let { buf.writeUUID(it) }

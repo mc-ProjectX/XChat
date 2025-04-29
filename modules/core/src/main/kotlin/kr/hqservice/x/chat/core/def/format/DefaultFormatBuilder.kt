@@ -79,6 +79,12 @@ class DefaultFormatBuilder() {
                 base.append(Component.text(separator))
                 base.append(xChatData.getMessage())
                 base.style(style)
+
+                val hoverEvent = hover(xChatData)
+                val clickEvent = click(xChatData)
+
+                if (hoverEvent != null) base.hoverEvent(hoverEvent)
+                if (clickEvent != null) base.clickEvent(clickEvent)
                 return base.build()
             }
 

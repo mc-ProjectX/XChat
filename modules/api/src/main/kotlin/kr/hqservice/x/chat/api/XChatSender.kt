@@ -6,4 +6,6 @@ interface XChatSender {
     fun getUniqueId(): UUID
 
     fun getDisplayName(): String
+
+    fun getOriginalName(): String
 }

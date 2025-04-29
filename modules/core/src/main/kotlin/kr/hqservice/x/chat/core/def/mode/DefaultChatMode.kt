@@ -6,6 +6,7 @@ import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
 import kr.hqservice.x.core.api.XPlayer
+import net.kyori.adventure.text.event.HoverEvent
 import org.bukkit.Server
 
 @Component
@@ -13,6 +14,7 @@ class DefaultChatMode(
     private val server: Server
 ) : XChatMode {
     private val format = DefaultFormatBuilder()
+        .setHover(HoverEvent.showText(net.kyori.adventure.text.Component.text("")))
         .build()
 
     override fun getKey(): String {

@@ -17,8 +17,8 @@ class DefaultFormatBuilder() {
     private var displayNameFormat: (String) -> String = { displayName -> displayName }
     private var separator: String = ": "
 
-    private var hover: HoverEventSource<*>? = null
-    private var click: ClickEvent? = null
+    private var hover: ((XChatData) -> HoverEventSource<*>)? = null
+    private var click: ((XChatData) -> ClickEvent)? = null
 
     private var receiveEvent: ((XChatSender, Player) -> Unit)? = null
 
@@ -42,12 +42,12 @@ class DefaultFormatBuilder() {
         return this
     }
 
-    fun setHover(hover: HoverEventSource<*>?): DefaultFormatBuilder {
-        this.hover = hover
+    fun setHover(hoverEvent: ((XChatData) -> HoverEventSource<*>)?): DefaultFormatBuilder {
+        this.hover = hoverEvent
         return this
     }
 
-    fun setClick(click: ClickEvent?): DefaultFormatBuilder {
+    fun setClick(click: ((XChatData) -> ClickEvent)?): DefaultFormatBuilder {
         this.click = click
         return this
     }
@@ -65,11 +65,11 @@ class DefaultFormatBuilder() {
 
         return object : XChatFormat {
             override fun hover(xChatData: XChatData): HoverEventSource<*>? {
-                return hover
+                return hover?.invoke(xChatData)
             }
 
             override fun click(xChatData: XChatData): ClickEvent? {
-                return click
+                return click?.invoke(xChatData)
             }
 
             override fun format(xChatData: XChatData): Component {

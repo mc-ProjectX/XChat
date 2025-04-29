@@ -8,7 +8,8 @@ import kr.hqservice.framework.bukkit.core.component.module.Setup
 class BukkitCommandSetupModule(
     private val plugin: HQBukkitPlugin,
     private val whisperCommandExecutor: WhisperCommandExecutor,
-    private val replyCommandExecutor: ReplyCommandExecutor
+    private val replyCommandExecutor: ReplyCommandExecutor,
+    private val operatorChatCommandExecutor: OperatorChatCommandExecutor
 ) {
     @Setup
     fun setup() {
@@ -23,5 +24,8 @@ class BukkitCommandSetupModule(
                 setExecutor(replyCommandExecutor)
                 tabCompleter = replyCommandExecutor
             }
+
+        plugin.getCommand("관리자채팅")
+            ?.setExecutor(operatorChatCommandExecutor)
     }
 }

@@ -1,7 +1,7 @@
 package kr.hqservice.x.chat.api.event
 
-import kr.hqservice.x.chat.api.ChatMode
-import kr.hqservice.x.chat.api.ChatSender
+import kr.hqservice.x.chat.api.XChatMode
+import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.core.api.XPlayer
 import net.kyori.adventure.text.Component
 import org.bukkit.event.Cancellable
@@ -9,8 +9,8 @@ import org.bukkit.event.Event
 import org.bukkit.event.HandlerList
 
 class AsyncXChatEvent(
-    private val user: ChatSender,
-    private val mode: ChatMode,
+    private val user: XChatSender,
+    private val mode: XChatMode,
     private val message: Component,
     private val receivers: List<XPlayer>
 ) : Event(true), Cancellable {

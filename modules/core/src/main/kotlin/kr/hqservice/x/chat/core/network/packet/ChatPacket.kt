@@ -6,41 +6,45 @@ import kr.hqservice.framework.netty.packet.extension.readString
 import kr.hqservice.framework.netty.packet.extension.readUUID
 import kr.hqservice.framework.netty.packet.extension.writeString
 import kr.hqservice.framework.netty.packet.extension.writeUUID
+import kr.hqservice.x.chat.api.XChatSender
+import kr.hqservice.x.chat.core.XChatSenderImpl
 import java.util.UUID
 
 class ChatPacket(
-    var sender: UUID,
-    var messageJson: String,
-    var receivers: List<UUID>,
-    var logging: Boolean,
-    var whisper: Boolean,
-    var componentId: Int
+    var mode: String,
+    var sender: XChatSender,
+    var singleReceiver: UUID?,
+    var jsonMessage: String,
+    var logging: Boolean
 ) : Packet() {
     override fun read(buf: ByteBuf) {
         logging = buf.readBoolean()
-        whisper = buf.readBoolean()
-        componentId = buf.readInt()
+        mode = buf.readString()
+        sender = XChatSenderImpl(
+            buf.readUUID(),
+            buf.readString()
+        )
+        singleReceiver = if (buf.readBoolean())
+            buf.readUUID()
+        else null
 
-        sender = buf.readUUID()
-        messageJson = buf.readString()
-        val size = buf.readInt()
-        receivers = mutableListOf<UUID>().apply {
-            repeat(size) {
-                add(buf.readUUID())
-            }
-        }
+        jsonMessage = buf.readString()
+            .replace("ª™ª", "$")
+            .replace("ª•ª", "\\")
     }
 
     override fun write(buf: ByteBuf) {
         buf.writeBoolean(logging)
-        buf.writeBoolean(whisper)
-        buf.writeInt(componentId)
+        buf.writeString(mode)
+        buf.writeUUID(sender.getUniqueId())
+        buf.writeString(sender.getDisplayName())
 
-        buf.writeUUID(sender)
-        buf.writeString(messageJson)
-        buf.writeInt(receivers.size)
-        receivers.forEach {
-            buf.writeUUID(it)
-        }
+        buf.writeBoolean(singleReceiver != null)
+        singleReceiver?.let { buf.writeUUID(it) }
+        buf.writeString(
+            jsonMessage
+                .replace("$", "ª™ª")
+                .replace("\\", "ª•ª")
+        )
     }
 }

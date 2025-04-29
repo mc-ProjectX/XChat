@@ -23,6 +23,13 @@ bukkitResourceGenerator {
             usage = "/답장 <메시지>"
             aliases = listOf("답", "r", "ekqwkd", "ekq")
         }
+
+        create("관리자채팅").apply {
+            description = "관리자 채팅 모드로 전환합니다."
+            usage = "/관리자채팅"
+            aliases = listOf("opchat")
+            permission = "op"
+        }
     }
 }
 

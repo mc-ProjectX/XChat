@@ -15,7 +15,7 @@ class PlayerChatModeRepository : PlayerRepository<ChatUserData>() {
             val entity = PlayerChatModeEntity.findById(player.uniqueId)
             if (entity != null) {
                 ChatUserData(
-                    entity.chatModeId,
+                    entity.chatModeKey,
                     entity.muteEndAt
                 )
             } else ChatUserData(null, null)
@@ -26,11 +26,11 @@ class PlayerChatModeRepository : PlayerRepository<ChatUserData>() {
         newSuspendedTransaction(Dispatchers.IO) {
             val entity = PlayerChatModeEntity.findById(player.uniqueId)
             if (entity != null) {
-                entity.chatModeId = value.chatModeId
+                entity.chatModeKey = value.chatModeKey
                 entity.muteEndAt = value.muteEndAt
             } else {
                 PlayerChatModeEntity.new(player.uniqueId) {
-                    chatModeId = value.chatModeId
+                    chatModeKey = value.chatModeKey
                     muteEndAt = value.muteEndAt
                 }
             }

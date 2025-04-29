@@ -1,10 +1,8 @@
 package kr.hqservice.x.chat.core.command
 
 import kr.hqservice.framework.global.core.component.Bean
-import kr.hqservice.x.chat.api.format.ErrorFormat
-import kr.hqservice.x.chat.api.format.WhisperReceiverFormat
-import kr.hqservice.x.chat.api.format.WhisperSenderFormat
-import kr.hqservice.x.chat.api.service.ChatService
+import kr.hqservice.x.chat.api.DefaultChatMode
+import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.core.api.service.XCoreService
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -16,7 +14,7 @@ import java.util.*
 @Bean
 class WhisperCommandExecutor(
     private val xCoreService: XCoreService,
-    private val xChatService: ChatService
+    private val xChatService: XChatService
 ) : TabExecutor {
     override fun onTabComplete(
         p0: CommandSender,
@@ -31,11 +29,11 @@ class WhisperCommandExecutor(
     override fun onCommand(sender: CommandSender, p1: Command, p2: String, args: Array<String>): Boolean {
         if (args.isEmpty()) {
             if (sender is Player) {
-                xChatService.sendChat(listOf(sender.uniqueId), "대상 플레이어를 입력해주세요.", ErrorFormat, logging = false)
+                xChatService.sendError(sender.uniqueId, "대상 플레이어를 입력해주세요.")
             } else sender.sendMessage("§c대상 플레이어를 입력해주세요.")
         } else if (args.size == 1) {
             if (sender is Player) {
-                xChatService.sendChat(listOf(sender.uniqueId), "메세지를 입력해주세요.", ErrorFormat, logging = false)
+                xChatService.sendError(sender.uniqueId, "메세지를 입력해주세요.")
             } else sender.sendMessage("§c메세지를 입력해주세요.")
         } else {
             val target = args[0]
@@ -43,25 +41,35 @@ class WhisperCommandExecutor(
             if (targetXPlayer != null) {
                 if (sender is Player) {
                     if (targetXPlayer.getUniqueId() == sender.uniqueId) {
-                        xChatService.sendChat(listOf(sender.uniqueId), "자기 자신에게 귓속말을 보낼 수 없습니다.", ErrorFormat, logging = false)
+                        xChatService.sendError(sender.uniqueId, "자기 자신에게 귓속말을 보낼 수 없습니다.")
                         return true
                     }
+
                     xChatService.sendChat(
-                        listOf(targetXPlayer.getUniqueId()),
+                        sender.uniqueId,
+                        targetXPlayer.getUniqueId(),
                         Arrays.copyOfRange(args, 1, args.size).joinToString(" "),
-                        WhisperReceiverFormat,
-                        xCoreService.getServer().findPlayer(sender.uniqueId)!!, false
+                        xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_SENDER),
+                        false
+                    )
+                    xChatService.sendChat(
+                        targetXPlayer.getUniqueId(),
+                        sender.uniqueId,
+                        Arrays.copyOfRange(args, 1, args.size).joinToString(" "),
+                        xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_RECEIVER),
+                        false
                     )
                 } else {
                     xChatService.sendChat(
-                        listOf(targetXPlayer.getUniqueId()),
+                        targetXPlayer.getUniqueId(),
+                        xChatService.getConsoleSender("관리자"),
                         Arrays.copyOfRange(args, 1, args.size).joinToString(" "),
-                        WhisperReceiverFormat,
-                        "관리자", false
+                        xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_RECEIVER),
+                        false
                     )
                 }
             } else {
-                if (sender is Player) xChatService.sendChat(listOf(sender.uniqueId), "대상 플레이어를 찾을 수 없습니다.", ErrorFormat)
+                if (sender is Player) xChatService.sendError(sender.uniqueId, "대상 플레이어를 찾을 수 없습니다.")
                 else sender.sendMessage("§c대상 플레이어를 찾을 수 없습니다.")
             }
         }

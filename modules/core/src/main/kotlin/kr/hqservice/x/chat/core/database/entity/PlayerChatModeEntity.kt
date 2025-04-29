@@ -12,12 +12,12 @@ class PlayerChatModeEntity(
 ) : UUIDEntity(id) {
     companion object : UUIDEntityClass<PlayerChatModeEntity>(PlayerChatModeTable)
 
-    var chatModeId by PlayerChatModeTable.chatModeId
+    var chatModeKey by PlayerChatModeTable.chatModeId
     var muteEndAt by PlayerChatModeTable.muteEndAt
 }
 
 @Table
 object PlayerChatModeTable : UUIDTable("x_user_chat") {
-    val chatModeId = integer("mode_id").nullable()
+    val chatModeId = char("mode_id", 64).nullable()
     val muteEndAt = long("mute_end_at").nullable()
 }

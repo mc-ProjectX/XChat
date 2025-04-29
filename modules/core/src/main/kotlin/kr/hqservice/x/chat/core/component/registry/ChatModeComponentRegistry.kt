@@ -1,27 +1,21 @@
 package kr.hqservice.x.chat.core.component.registry
 
 import kr.hqservice.framework.global.core.component.Bean
-import kr.hqservice.x.chat.api.ChatMode
-import kr.hqservice.x.chat.core.component.DefaultChatModeComponent
+import kr.hqservice.x.chat.api.XChatMode
 
 @Bean
 class ChatModeComponentRegistry {
-    private val chatModeComponents = mutableMapOf<Int, ChatMode>()
-    private val defaultChatMode = DefaultChatModeComponent
+    private val chatModeComponents = mutableMapOf<String, XChatMode>()
 
-    fun registerChatMode(chatMode: ChatMode) {
-        chatModeComponents[chatMode.getId()] = chatMode
+    fun registerChatMode(chatMode: XChatMode) {
+        chatModeComponents[chatMode.getKey()] = chatMode
     }
 
-    fun findChatMode(id: Int): ChatMode? {
+    fun findChatMode(id: String): XChatMode? {
         return chatModeComponents[id]
     }
 
-    fun getDefaultChatMode(): ChatMode {
-        return defaultChatMode
-    }
-
-    fun getAllChatModes(): Collection<ChatMode> {
+    fun getAllChatModes(): Collection<XChatMode> {
         return chatModeComponents.values
     }
 }

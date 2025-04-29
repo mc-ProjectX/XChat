@@ -1,3 +1,5 @@
+import kr.hqservice.resourcegenerator.bukkit.BukkitResourceGeneratorProperties
+
 plugins {
     id("hq.shared")
     id("hq.shadow")
@@ -27,8 +29,15 @@ bukkitResourceGenerator {
         create("관리자채팅").apply {
             description = "관리자 채팅 모드로 전환합니다."
             usage = "/관리자채팅"
-            aliases = listOf("opchat")
+            aliases = listOf("opchat", "operatorchat")
             permission = "op"
+        }
+
+        create("가이드채팅").apply {
+            description = "가이드 채팅 모드로 전환합니다."
+            usage = "/가이드채팅"
+            aliases = listOf("guidechat")
+            permission = "project_x.group.guide"
         }
     }
 }

@@ -9,7 +9,8 @@ class BukkitCommandSetupModule(
     private val plugin: HQBukkitPlugin,
     private val whisperCommandExecutor: WhisperCommandExecutor,
     private val replyCommandExecutor: ReplyCommandExecutor,
-    private val operatorChatCommandExecutor: OperatorChatCommandExecutor
+    private val operatorChatCommandExecutor: OperatorChatCommandExecutor,
+    private val guideChatCommandExecutor: GuideChatCommandExecutor,
 ) {
     @Setup
     fun setup() {
@@ -27,5 +28,8 @@ class BukkitCommandSetupModule(
 
         plugin.getCommand("관리자채팅")
             ?.setExecutor(operatorChatCommandExecutor)
+
+        plugin.getCommand("가이드채팅")
+            ?.setExecutor(guideChatCommandExecutor)
     }
 }

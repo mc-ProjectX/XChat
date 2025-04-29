@@ -1,6 +1,8 @@
 package kr.hqservice.x.chat.core.network.packet
 
 import io.netty.buffer.ByteBuf
+import kr.hqservice.framework.global.core.extension.compress
+import kr.hqservice.framework.global.core.extension.decompress
 import kr.hqservice.framework.netty.packet.Packet
 import kr.hqservice.framework.netty.packet.extension.readString
 import kr.hqservice.framework.netty.packet.extension.readUUID
@@ -29,7 +31,11 @@ class ChatPacket(
             buf.readUUID()
         else null
 
-        jsonMessage = buf.readString()
+        val bytesLength = buf.readInt()
+        val bytes = ByteArray(bytesLength)
+        buf.readBytes(bytes)
+        jsonMessage = bytes
+            .toString(Charsets.UTF_8)
             .replace("ª™ª", "$")
             .replace("ª•ª", "\\")
     }
@@ -43,10 +49,12 @@ class ChatPacket(
 
         buf.writeBoolean(singleReceiver != null)
         singleReceiver?.let { buf.writeUUID(it) }
-        buf.writeString(
-            jsonMessage
-                .replace("$", "ª™ª")
-                .replace("\\", "ª•ª")
-        )
+        val jsonText = jsonMessage
+            .replace("$", "ª™ª")
+            .replace("\\", "ª•ª")
+
+        val bytes = jsonText.toByteArray(Charsets.UTF_8)
+        buf.writeInt(bytes.size)
+        buf.writeBytes(bytes)
     }
 }

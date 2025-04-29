@@ -51,7 +51,11 @@ class ChatPacketHandler(
                     .filter(filter)
             }
 
-            val message = JSONComponentSerializer.json().deserialize(packet.jsonMessage)
+            val message = try {
+                JSONComponentSerializer.json().deserialize(packet.jsonMessage)
+            } catch (e: Exception) {
+                LegacyComponentSerializer.legacySection().deserialize(packet.jsonMessage)
+            }
             val chatData =
                 if (mode is WhisperReceiveChatMode) XChatWhisperData(packet.sender, receivers.firstOrNull() ?: xCoreService.getServer().findPlayer(singleReceiver ?: return@registerInnerPacket) ?: return@registerInnerPacket, message)
                 else XChatDataImpl(packet.sender, message)

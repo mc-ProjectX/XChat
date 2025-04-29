@@ -1,9 +1,11 @@
 package kr.hqservice.x.chat.core.command
 
+import kr.hqservice.framework.bukkit.core.extension.colorize
 import kr.hqservice.framework.global.core.component.Bean
 import kr.hqservice.x.chat.api.DefaultChatMode
 import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.core.api.service.XCoreService
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
@@ -41,6 +43,8 @@ class WhisperCommandExecutor(
             val target = args[0]
             val targetXPlayer = xCoreService.getServer().getPlayers().firstOrNull { it.getName().equals(target, true) || it.getDisplayName().equals(target, true) }
             if (targetXPlayer != null) {
+                var message = Arrays.copyOfRange(args, 1, args.size).joinToString(" ")
+                if (!sender.isOp) message = ChatColor.stripColor(message.colorize())!!
                 if (sender is Player) {
                     if (targetXPlayer.getUniqueId() == sender.uniqueId) {
                         xChatService.sendError(sender.uniqueId, "자기 자신에게 귓속말을 보낼 수 없습니다.")
@@ -50,14 +54,14 @@ class WhisperCommandExecutor(
                     xChatService.sendChat(
                         sender.uniqueId,
                         targetXPlayer.getUniqueId(),
-                        Arrays.copyOfRange(args, 1, args.size).joinToString(" "),
+                        message,
                         xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_SENDER),
                         false
                     )
                     xChatService.sendChat(
                         targetXPlayer.getUniqueId(),
                         sender.uniqueId,
-                        Arrays.copyOfRange(args, 1, args.size).joinToString(" "),
+                        message,
                         xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_RECEIVER),
                         false
                     )
@@ -65,7 +69,7 @@ class WhisperCommandExecutor(
                     xChatService.sendChat(
                         targetXPlayer.getUniqueId(),
                         xChatService.getConsoleSender("관리자"),
-                        Arrays.copyOfRange(args, 1, args.size).joinToString(" "),
+                        message,
                         xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_RECEIVER),
                         false
                     )

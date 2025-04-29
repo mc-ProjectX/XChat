@@ -1,10 +1,12 @@
 package kr.hqservice.x.chat.core.command
 
+import kr.hqservice.framework.bukkit.core.extension.colorize
 import kr.hqservice.framework.global.core.component.Bean
 import kr.hqservice.x.chat.api.DefaultChatMode
 import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.chat.core.registry.WhisperReplyRegistry
 import kr.hqservice.x.core.api.service.XCoreService
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
@@ -38,17 +40,19 @@ class ReplyCommandExecutor(
             }
             val targetXPlayer = xCoreService.getServer().getPlayers().firstOrNull { it.getUniqueId() == target }
             if (targetXPlayer != null) {
+                var message = args.joinToString(" ")
+                if (!sender.isOp) message = ChatColor.stripColor(message.colorize())!!
                 xChatService.sendChat(
                     targetXPlayer.getUniqueId(),
                     sender.uniqueId,
-                    args.joinToString(" "),
+                    message,
                     xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_RECEIVER),
                     false
                 )
                 xChatService.sendChat(
                     sender.uniqueId,
                     targetXPlayer.getUniqueId(),
-                    args.joinToString(" "),
+                    message,
                     xChatService.getDefaultChatMode(DefaultChatMode.WHISPER_SENDER),
                     false
                 )

@@ -1,23 +1,27 @@
-package kr.hqservice.x.chat.core.command
+package kr.hqservice.x.chat.core.command.component.executor
 
 import kr.hqservice.framework.bukkit.core.extension.colorize
-import kr.hqservice.framework.global.core.component.Bean
+import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.DefaultChatMode
 import kr.hqservice.x.chat.api.service.XChatService
+import kr.hqservice.x.chat.core.command.component.BukkitCommandComponent
 import kr.hqservice.x.chat.core.registry.WhisperReplyRegistry
 import kr.hqservice.x.core.api.service.XCoreService
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
-import org.bukkit.command.TabExecutor
 import org.bukkit.entity.Player
 
-@Bean
+@Component
 class ReplyCommandExecutor(
     private val xCoreService: XCoreService,
     private val xChatService: XChatService,
     private val whisperReplyRegistry: WhisperReplyRegistry
-) : TabExecutor {
+) : BukkitCommandComponent {
+    override fun getBukkitCommand(): String {
+        return "답장"
+    }
+
     override fun onTabComplete(
         p0: CommandSender,
         p1: Command,

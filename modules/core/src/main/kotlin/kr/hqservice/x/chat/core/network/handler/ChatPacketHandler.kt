@@ -3,12 +3,14 @@ package kr.hqservice.x.chat.core.network.handler
 import kr.hqservice.framework.bukkit.core.component.module.Module
 import kr.hqservice.framework.bukkit.core.component.module.Setup
 import kr.hqservice.framework.netty.api.NettyServer
+import kr.hqservice.x.chat.api.DefaultChatMode
 import kr.hqservice.x.chat.api.XChatModeWithSpy
 import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.chat.api.service.XChatUserService
 import kr.hqservice.x.chat.core.XChatDataImpl
 import kr.hqservice.x.chat.core.XChatWhisperData
 import kr.hqservice.x.chat.core.def.mode.WhisperReceiveChatMode
+import kr.hqservice.x.chat.core.network.packet.ChatClearPacket
 import kr.hqservice.x.chat.core.network.packet.ChatPacket
 import kr.hqservice.x.core.api.service.XCoreService
 import net.kyori.adventure.text.Component
@@ -34,6 +36,17 @@ class ChatPacketHandler(
 ) {
     @Setup
     fun setup() {
+        nettyServer.registerOuterPacket(ChatClearPacket::class)
+        nettyServer.registerInnerPacket(ChatClearPacket::class) { packet, _ ->
+            plugin.server.scheduler.runTask(plugin, Runnable {
+                server.dispatchCommand(server.consoleSender, "clearchat -s")
+
+                server.broadcast(Component.text("${packet.clearOwner} 님이 채팅을 청소 하였습니다.").style(Style.style(
+                    TextColor.color(0x888888), TextDecoration.ITALIC.withState(false)
+                )))
+            })
+        }
+
         nettyServer.registerOuterPacket(ChatPacket::class)
         nettyServer.registerInnerPacket(ChatPacket::class) { packet , _ ->
             val mode = xChatService.findChatMode(packet.mode) ?: return@registerInnerPacket

@@ -18,6 +18,11 @@ bukkitResourceGenerator {
             description = "스파이 모드 전환 가능한 권한입니다."
             default = BukkitResourceGeneratorProperties.Permission.Default.OP
         }
+
+        create("project_x.chat.clear") {
+            description = "채팅을 청소할 수 있는 권한입니다."
+            default = BukkitResourceGeneratorProperties.Permission.Default.OP
+        }
     }
 
     commands.apply {
@@ -35,28 +40,30 @@ bukkitResourceGenerator {
 
         create("일반채팅").apply {
             description = "일반 채팅 모드로 전환합니다."
-            usage = "/일반채팅"
         }
 
         create("관리자채팅").apply {
             description = "관리자 채팅 모드로 전환합니다."
-            usage = "/관리자채팅"
             aliases = listOf("opchat", "operatorchat")
             permission = "op"
         }
 
         create("가이드채팅").apply {
             description = "가이드 채팅 모드로 전환합니다."
-            usage = "/가이드채팅"
             aliases = listOf("guidechat")
             permission = "project_x.group.guide"
         }
 
         create("스파이").apply {
             description = "스파이 모드로 전환합니다."
-            usage = "/스파이"
             aliases = listOf("spy")
             permission = "project_x.chat.spy"
+        }
+
+        create("채팅청소").apply {
+            description = "채팅을 청소합니다."
+            aliases = listOf("spy")
+            permission = "project_x.chat.clear"
         }
     }
 }

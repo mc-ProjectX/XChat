@@ -1,18 +1,22 @@
-package kr.hqservice.x.chat.core.command
+package kr.hqservice.x.chat.core.command.component.executor
 
-import kr.hqservice.framework.global.core.component.Bean
+import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.chat.api.service.XChatUserService
+import kr.hqservice.x.chat.core.command.component.BukkitCommandComponent
 import org.bukkit.command.Command
-import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
-@Bean
+@Component
 class SpyToggleCommandExecutor(
     private val xChatService: XChatService,
     private val playerChatModeService: XChatUserService
-) : CommandExecutor {
+) : BukkitCommandComponent {
+    override fun getBukkitCommand(): String {
+        return "스파이"
+    }
+
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>?): Boolean {
         if (p0 is Player) {
             playerChatModeService.setSpyMode(p0.uniqueId, !playerChatModeService.isSpyMode(p0.uniqueId))

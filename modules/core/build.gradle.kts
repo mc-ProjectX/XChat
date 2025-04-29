@@ -11,4 +11,6 @@ dependencies {
 
     compileOnly(projectX.core)
     compileOnly(project(":modules:api"))
+
+    testImplementation(kotlin("test"))
 }

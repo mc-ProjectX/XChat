@@ -23,7 +23,7 @@ class XChatServiceImpl(
     private val chatModeComponentRegistry: ChatModeComponentRegistry
 ) : XChatService {
     private val consoleId = UUID.randomUUID()
-    private val consoleSender = XChatSenderImpl(consoleId, "SYSTEM", "console")
+    private val consoleSender = XChatSenderImpl(consoleId, "[SYSTEM]", "console")
 
     override fun getConsoleSender(label: String): XChatSender {
         return if (label.isNotEmpty()) XChatSenderImpl(consoleId, label, "console") else consoleSender

@@ -22,7 +22,9 @@ class WhisperCommandExecutor(
         p2: String,
         p3: Array<String>
     ): List<String> {
-        return if (p3.size in 0 .. 1) return StringUtil.copyPartialMatches(p3[0], xCoreService.getServer().getPlayers().map { it.getDisplayName() }, mutableListOf())
+        val set = xCoreService.getServer().getPlayers().map { it.getDisplayName() }.toSet() +
+            xCoreService.getServer().getPlayers().map { it.getName() }.toSet()
+        return if (p3.size in 0 .. 1) return StringUtil.copyPartialMatches(p3[0], set.toList(), mutableListOf())
         else emptyList()
     }
 
@@ -37,7 +39,7 @@ class WhisperCommandExecutor(
             } else sender.sendMessage("§c메세지를 입력해주세요.")
         } else {
             val target = args[0]
-            val targetXPlayer = xCoreService.getServer().getPlayers().firstOrNull { it.getDisplayName().equals(target, true) }
+            val targetXPlayer = xCoreService.getServer().getPlayers().firstOrNull { it.getName().equals(target, true) || it.getDisplayName().equals(target, true) }
             if (targetXPlayer != null) {
                 if (sender is Player) {
                     if (targetXPlayer.getUniqueId() == sender.uniqueId) {

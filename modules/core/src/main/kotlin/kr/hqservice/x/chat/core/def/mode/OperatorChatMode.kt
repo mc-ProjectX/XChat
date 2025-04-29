@@ -4,15 +4,13 @@ import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.XChatFormat
 import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
-import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
 import kr.hqservice.x.core.api.XPlayer
 import org.bukkit.Server
 
 @Component
 class OperatorChatMode(
-    private val server: Server,
-    private val xChatService: XChatService
+    private val server: Server
 ) : XChatMode {
     private val format = DefaultFormatBuilder()
         .setPrefix("[관리자] ")
@@ -27,7 +25,7 @@ class OperatorChatMode(
     }
 
     override fun hasSendPermission(sender: XChatSender): Boolean {
-        return server.operators.any { it.uniqueId == sender.getUniqueId() } || xChatService.getConsoleSender().getUniqueId() == sender.getUniqueId()
+        return server.operators.any { it.uniqueId == sender.getUniqueId() }
     }
 
     override fun getReceiverFilter(sender: XChatSender): (XPlayer) -> Boolean {

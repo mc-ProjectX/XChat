@@ -11,7 +11,8 @@ class BukkitCommandSetupModule(
     private val replyCommandExecutor: ReplyCommandExecutor,
     private val operatorChatCommandExecutor: OperatorChatCommandExecutor,
     private val guideChatCommandExecutor: GuideChatCommandExecutor,
-    private val spyToggleCommandExecutor: SpyToggleCommandExecutor
+    private val spyToggleCommandExecutor: SpyToggleCommandExecutor,
+    private val defaultChatCommandExecutor: DefaultChatCommandExecutor,
 ) {
     @Setup
     fun setup() {
@@ -35,5 +36,8 @@ class BukkitCommandSetupModule(
 
         plugin.getCommand("스파이")
             ?.setExecutor(spyToggleCommandExecutor)
+
+        plugin.getCommand("일반채팅")
+            ?.setExecutor(defaultChatCommandExecutor)
     }
 }

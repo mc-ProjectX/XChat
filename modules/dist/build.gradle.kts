@@ -33,6 +33,11 @@ bukkitResourceGenerator {
             aliases = listOf("답", "r", "ekqwkd", "ekq")
         }
 
+        create("일반채팅").apply {
+            description = "일반 채팅 모드로 전환합니다."
+            usage = "/일반채팅"
+        }
+
         create("관리자채팅").apply {
             description = "관리자 채팅 모드로 전환합니다."
             usage = "/관리자채팅"

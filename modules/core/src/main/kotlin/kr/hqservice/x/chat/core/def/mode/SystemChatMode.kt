@@ -13,7 +13,7 @@ class SystemChatMode(
 ) : XChatMode {
     private val format = DefaultFormatBuilder()
         .setColor(0xdbdbce)
-        .setSeparator("")
+        .setSeparator(" ")
         .build()
 
     override fun getKey(): String {

@@ -11,10 +11,10 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 
-class DefaultFormatBuilder() {
+class DefaultFormatBuilder {
     private var color: Int = 0xffffff
     private var prefix: String = ""
-    private var displayNameFormat: (String) -> String = { displayName -> displayName }
+    private var displayNameFormat: (XChatData) -> String = { data -> data.getSender().getDisplayName() }
     private var separator: String = ": "
 
     private var hover: ((XChatData) -> HoverEventSource<*>)? = null
@@ -32,7 +32,7 @@ class DefaultFormatBuilder() {
         return this
     }
 
-    fun setDisplayNameFormat(format: (String) -> String): DefaultFormatBuilder {
+    fun setAfterPrefix(format: (XChatData) -> String): DefaultFormatBuilder {
         this.displayNameFormat = format
         return this
     }
@@ -75,7 +75,7 @@ class DefaultFormatBuilder() {
             override fun format(xChatData: XChatData): Component {
                 val base = Component.text()
                 base.append(Component.text(prefix))
-                base.append(Component.text(xChatData.getSender().getDisplayName().run(displayNameFormat)))
+                base.append(Component.text(xChatData.run(displayNameFormat)))
                 base.append(Component.text(separator))
                 base.append(xChatData.getMessage())
                 base.style(style)

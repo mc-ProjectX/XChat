@@ -16,7 +16,8 @@ class PlayerChatModeRepository : PlayerRepository<ChatUserData>() {
             if (entity != null) {
                 ChatUserData(
                     entity.chatModeKey,
-                    entity.muteEndAt
+                    entity.muteEndAt,
+                    entity.spyMode
                 )
             } else ChatUserData(null, null)
         }
@@ -28,10 +29,12 @@ class PlayerChatModeRepository : PlayerRepository<ChatUserData>() {
             if (entity != null) {
                 entity.chatModeKey = value.chatModeKey
                 entity.muteEndAt = value.muteEndAt
+                entity.spyMode = value.spyMode
             } else {
                 PlayerChatModeEntity.new(player.uniqueId) {
                     chatModeKey = value.chatModeKey
                     muteEndAt = value.muteEndAt
+                    spyMode = value.spyMode
                 }
             }
         }

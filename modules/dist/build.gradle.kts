@@ -13,6 +13,13 @@ bukkitResourceGenerator {
     depend = listOf("HQFramework", "XCore")
     libraries = excludedRuntimeDependencies()
 
+    permissions.apply {
+        create("project_x.chat.spy") {
+            description = "스파이 모드 전환 가능한 권한입니다."
+            default = BukkitResourceGeneratorProperties.Permission.Default.OP
+        }
+    }
+
     commands.apply {
         create("귓").apply {
             description = "귓속말을 보낼 수 있습니다."
@@ -38,6 +45,13 @@ bukkitResourceGenerator {
             usage = "/가이드채팅"
             aliases = listOf("guidechat")
             permission = "project_x.group.guide"
+        }
+
+        create("스파이").apply {
+            description = "스파이 모드로 전환합니다."
+            usage = "/스파이"
+            aliases = listOf("spy")
+            permission = "project_x.chat.spy"
         }
     }
 }

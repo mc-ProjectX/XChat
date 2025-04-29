@@ -8,7 +8,7 @@ import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
 @Component
 class WhisperSendChatMode : XChatMode {
     private val format = DefaultFormatBuilder()
-        .setDisplayNameFormat { "$it 님에게 보냄" }
+        .setAfterPrefix { "${it.getSender().getDisplayName()} 님에게 보냄" }
         .setColor(0xadffe2).build()
 
     override fun getKey(): String {

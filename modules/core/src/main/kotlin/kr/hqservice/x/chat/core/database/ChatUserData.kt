@@ -2,5 +2,6 @@ package kr.hqservice.x.chat.core.database
 
 data class ChatUserData(
     val chatModeKey: String?,
-    val muteEndAt: Long?
+    val muteEndAt: Long?,
+    val spyMode: Boolean = false
 )

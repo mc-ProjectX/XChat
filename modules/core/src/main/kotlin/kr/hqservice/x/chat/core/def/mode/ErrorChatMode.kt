@@ -13,9 +13,9 @@ class ErrorChatMode(
     private val xChatService: XChatService
 ) : XChatMode {
     private val format = DefaultFormatBuilder()
-        .setPrefix("[!] ")
-        .setDisplayNameFormat { "" }
-        .setSeparator("")
+        .setPrefix("[!]")
+        .setAfterPrefix { "" }
+        .setSeparator(" ")
         .setReceiveEvent { _, it -> it.playSound(it.location, Sound.BLOCK_NOTE_BLOCK_BASS, .7f, .7f) }
         .setColor(0xcf3e54).build()
 

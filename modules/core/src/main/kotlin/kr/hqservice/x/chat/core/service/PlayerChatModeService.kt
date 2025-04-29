@@ -29,8 +29,17 @@ class PlayerChatModeService(
         return getPlayerChatModeData(userId).muteEndAt
     }
 
+    override fun isSpyMode(userId: UUID): Boolean {
+        return getPlayerChatModeData(userId).spyMode
+    }
+
     override fun setMute(userId: UUID, muteEndAt: Long?) {
         val chatUserData = getPlayerChatModeData(userId).copy(muteEndAt = muteEndAt)
+        setPlayerChatModeData(userId, chatUserData)
+    }
+
+    override fun setSpyMode(userId: UUID, spyMode: Boolean) {
+        val chatUserData = getPlayerChatModeData(userId).copy(spyMode = spyMode)
         setPlayerChatModeData(userId, chatUserData)
     }
 

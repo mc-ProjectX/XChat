@@ -8,7 +8,11 @@ interface XChatUserService {
 
     fun getMuteEndAt(userId: UUID): Long?
 
+    fun isSpyMode(userId: UUID): Boolean
+
     fun setChatMode(userId: UUID, xChatMode: XChatMode?)
 
     fun setMute(userId: UUID, muteEndAt: Long?)
+
+    fun setSpyMode(userId: UUID, spyMode: Boolean)
 }

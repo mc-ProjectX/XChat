@@ -67,7 +67,7 @@ class ChatPacketHandler(
 
             val message = try {
                 JSONComponentSerializer.json().deserialize(packet.jsonMessage)
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 LegacyComponentSerializer.legacySection().deserialize(packet.jsonMessage)
             }
             val chatData =

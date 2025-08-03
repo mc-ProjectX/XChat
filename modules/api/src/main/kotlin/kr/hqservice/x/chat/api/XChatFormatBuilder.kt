@@ -77,8 +77,8 @@ class XChatFormatBuilder {
 
             override fun format(xChatData: XChatData): Component {
                 val base = Component.text()
-                val prefix = Component.text(prefix)
-                if (prefixColor != null) prefix.color(TextColor.color(prefixColor!!))
+                var prefix = Component.text(prefix)
+                if (prefixColor != null) prefix = prefix.style(Style.style(TextColor.color(prefixColor!!)))
                 base.append(prefix)
                 base.append(Component.text(xChatData.run(displayNameFormat)))
                 base.append(Component.text(separator))

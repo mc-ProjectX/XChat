@@ -25,8 +25,9 @@ class RegionChatMode(
     private val format = XChatFormatBuilder()
         // Server Front
         .setPrefix("䰴")
-        .setPrefixColor(0xebd2b2)
+        .setPrefixColor(0xffffff)
 
+        .setColor(0xebd2b2)
         .setHover {
             val text = net.kyori.adventure.text.Component.text()
             text.append(net.kyori.adventure.text.Component.text(

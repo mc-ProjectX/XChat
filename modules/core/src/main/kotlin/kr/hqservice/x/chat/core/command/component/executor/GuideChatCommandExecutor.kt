@@ -21,7 +21,7 @@ class GuideChatCommandExecutor(
         if (p0 is Player) {
             if (playerChatModeService.getCurrentChatMode(p0.uniqueId).getKey() == "guide") {
                 playerChatModeService.setChatMode(p0.uniqueId, null)
-                xChatService.sendInfo(p0.uniqueId, "일반 채팅모드로 변경되었습니다.")
+                xChatService.sendInfo(p0.uniqueId, "전체 채팅모드로 변경되었습니다.")
             } else {
                 playerChatModeService.setChatMode(p0.uniqueId, xChatService.findChatMode("guide"))
                 xChatService.sendInfo(p0.uniqueId, "가이드 채팅모드로 변경되었습니다.")

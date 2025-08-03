@@ -3,9 +3,8 @@ package kr.hqservice.x.chat.core.def.mode
 import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.XChatFormat
 import kr.hqservice.x.chat.api.XChatSender
-import kr.hqservice.x.chat.api.XChatModeWithSpy
-import kr.hqservice.x.chat.core.XChatWhisperData
-import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
+import kr.hqservice.x.chat.api.XChatFormatBuilder
+import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.core.api.XPlayer
 import kr.hqservice.x.core.api.service.XCoreService
 import net.kyori.adventure.text.event.ClickEvent
@@ -22,8 +21,12 @@ import java.time.format.FormatStyle
 class DefaultChatMode(
     private val server: Server,
     private val xCoreService: XCoreService
-) : XChatModeWithSpy {
-    private val format = DefaultFormatBuilder()
+) : XChatMode {
+    private val format = XChatFormatBuilder()
+        // Server Front
+        .setPrefix("鵈")
+        .setPrefixColor(0xffffff)
+
         .setHover {
             val text = net.kyori.adventure.text.Component.text()
             text.append(net.kyori.adventure.text.Component.text(
@@ -39,22 +42,6 @@ class DefaultChatMode(
             ClickEvent.suggestCommand("/귓 ${it.getSender().getDisplayName()} ")
         }.build()
 
-    private val spyFormat = DefaultFormatBuilder()
-        .setHover {
-            val text = net.kyori.adventure.text.Component.text()
-            text.append(net.kyori.adventure.text.Component.text(
-                "보낸 유저: ${if (it.getSender().getDisplayName() != it.getSender().getOriginalName()) "${it.getSender().getDisplayName()}(${it.getSender().getOriginalName()})" else it.getSender().getOriginalName()}" +
-                " [${xCoreService.getServer().findPlayer(it.getSender().getUniqueId())?.getChannel()?.getChannelName()}]\n" +
-                "수신 받은 시간: ${LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))}"
-            ))
-            text.style(Style.style(TextColor.color(0xffffff), TextDecoration.ITALIC.withState(false)))
-            HoverEvent.showText(text)
-        }.setColor(0xc4c4c4).build()
-
-    override fun getSpyFormat(): XChatFormat {
-        return spyFormat
-    }
-
     override fun getKey(): String {
         return "default"
     }
@@ -63,13 +50,15 @@ class DefaultChatMode(
         return format
     }
 
-    override fun getReceiverFilter(sender: XChatSender): (XPlayer) -> Boolean {
-        val senderPlayer = server.getPlayer(sender.getUniqueId()) ?: return { _ -> false }
+    override fun getReceiverFilter(sender: XChatSender, extraData: Any?): (XPlayer) -> Boolean {
+        /*val senderPlayer = server.getPlayer(sender.getUniqueId()) ?: return { _ -> false }
         return { receiver ->
             val receiverPlayer = server.getPlayer(receiver.getUniqueId())
             if (receiverPlayer != null) {
                 receiverPlayer.location.world.name == senderPlayer.location.world.name
             } else false
-        }
+        }*/
+
+        return { _ -> true }
     }
 }

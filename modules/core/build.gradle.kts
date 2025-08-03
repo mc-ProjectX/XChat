@@ -8,6 +8,7 @@ dependencies {
     compileOnly(framework.core)
     compileOnly(framework.command)
     compileOnly(framework.database)
+    compileOnly(framework.inventory)
 
     compileOnly(projectX.core)
     compileOnly(project(":modules:api"))

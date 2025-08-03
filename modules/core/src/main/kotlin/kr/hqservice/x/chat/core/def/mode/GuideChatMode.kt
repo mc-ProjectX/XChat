@@ -4,7 +4,7 @@ import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.XChatFormat
 import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
-import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
+import kr.hqservice.x.chat.api.XChatFormatBuilder
 import kr.hqservice.x.core.api.XPlayer
 import org.bukkit.Server
 
@@ -12,8 +12,11 @@ import org.bukkit.Server
 class GuideChatMode(
     private val server: Server
 ) : XChatMode {
-    private val format = DefaultFormatBuilder()
-        .setPrefix("[가이드] ")
+    private val format = XChatFormatBuilder()
+        // Server Front
+        .setPrefix("铭")
+        .setPrefixColor(0xffffff)
+
         .setColor(0xffe97d).build()
 
     override fun getKey(): String {
@@ -28,7 +31,7 @@ class GuideChatMode(
         return server.operators.any { it.uniqueId == sender.getUniqueId() } || server.getPlayer(sender.getUniqueId())?.hasPermission("project_x.group.guide") == true
     }
 
-    override fun getReceiverFilter(sender: XChatSender): (XPlayer) -> Boolean {
+    override fun getReceiverFilter(sender: XChatSender, extraData: Any?): (XPlayer) -> Boolean {
         return { receiver -> server.operators.any { receiver.getUniqueId() == it.uniqueId }
                 || server.getPlayer(receiver.getUniqueId())?.hasPermission("project_x.group.guide") == true }
     }

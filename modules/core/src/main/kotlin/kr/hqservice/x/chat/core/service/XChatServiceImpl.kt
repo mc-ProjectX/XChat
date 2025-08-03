@@ -77,12 +77,16 @@ class XChatServiceImpl(
         if (!xChatMode.hasSendPermission(sender)) return false
 
         val jsonText = JSONComponentSerializer.json().serialize(chat)
+        val extra = xChatMode.extraData(sender.getUniqueId())
+        val byteArray = extra?.let { xChatMode.writeExtraData(it) }
+
         val packet = ChatPacket(
             xChatMode.getKey(),
             sender,
             targetId,
             jsonText,
-            if (!logging) xChatMode.isLoggingEnabled() else true
+            if (!logging) xChatMode.isLoggingEnabled() else true,
+            byteArray
         )
 
         packetSender.sendPacketAll(packet)

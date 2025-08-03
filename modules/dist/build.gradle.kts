@@ -38,8 +38,14 @@ bukkitResourceGenerator {
             aliases = listOf("답", "r", "ekqwkd", "ekq")
         }
 
-        create("일반채팅").apply {
-            description = "일반 채팅 모드로 전환합니다."
+        create("전체채팅").apply {
+            description = "전체 채팅 모드로 전환합니다."
+            aliases = listOf("wjscpcoxld", "전챗", "wjscpt")
+        }
+
+        create("지역채팅").apply {
+            description = "지역 채팅 모드로 전환합니다."
+            aliases = listOf("wldurcoxld","wlcot","지챗")
         }
 
         create("관리자채팅").apply {

@@ -5,14 +5,14 @@ import kr.hqservice.x.chat.api.XChatFormat
 import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.chat.api.service.XChatService
-import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
+import kr.hqservice.x.chat.api.XChatFormatBuilder
 import org.bukkit.Sound
 
 @Component
 class ErrorChatMode(
     private val xChatService: XChatService
 ) : XChatMode {
-    private val format = DefaultFormatBuilder()
+    private val format = XChatFormatBuilder()
         .setPrefix("[!]")
         .setAfterPrefix { "" }
         .setSeparator(" ")

@@ -9,22 +9,22 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
 @Component
-class OperatorChatCommandExecutor(
+class RegionChatCommandExecutor(
     private val xChatService: XChatService,
     private val playerChatModeService: XChatUserService
 ) : BukkitCommandComponent {
     override fun getBukkitCommand(): String {
-        return "관리자채팅"
+        return "지역채팅"
     }
 
     override fun onCommand(p0: CommandSender, p1: Command, p2: String, p3: Array<out String>?): Boolean {
         if (p0 is Player) {
-            if (playerChatModeService.getCurrentChatMode(p0.uniqueId).getKey() == "operator") {
+            if (playerChatModeService.getCurrentChatMode(p0.uniqueId).getKey() == "region") {
                 playerChatModeService.setChatMode(p0.uniqueId, null)
                 xChatService.sendInfo(p0.uniqueId, "전체 채팅모드로 변경되었습니다.")
             } else {
-                playerChatModeService.setChatMode(p0.uniqueId, xChatService.findChatMode("operator"))
-                xChatService.sendInfo(p0.uniqueId, "관리자 채팅모드로 변경되었습니다.")
+                playerChatModeService.setChatMode(p0.uniqueId, xChatService.findChatMode("region"))
+                xChatService.sendInfo(p0.uniqueId, "지역 채팅모드로 변경되었습니다.")
             }
         }
         return true

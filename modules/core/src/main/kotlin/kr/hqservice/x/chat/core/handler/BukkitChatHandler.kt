@@ -24,6 +24,7 @@ class BukkitChatHandler(
         val user = XChatSenderImpl(event.player.uniqueId, event.player.displayName, event.player.name)
         var message = PlainTextComponentSerializer.plainText().serialize(event.message())
         if (!event.player.isOp) message = ChatColor.stripColor(message.colorize())!!
+
         if (!chatService.sendChat(null, user, message, userService.getCurrentChatMode(user.getUniqueId()))) {
             chatService.sendError(user.getUniqueId(), userService.getCurrentChatMode(user.getUniqueId()).permissionDeniedMessage())
         }

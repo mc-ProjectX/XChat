@@ -8,6 +8,7 @@ import kr.hqservice.framework.netty.packet.extension.readString
 import kr.hqservice.framework.netty.packet.extension.readUUID
 import kr.hqservice.framework.netty.packet.extension.writeString
 import kr.hqservice.framework.netty.packet.extension.writeUUID
+import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.chat.core.XChatSenderImpl
 import java.util.UUID
@@ -17,7 +18,8 @@ class ChatPacket(
     var sender: XChatSender,
     var singleReceiver: UUID?,
     var jsonMessage: String,
-    var logging: Boolean
+    var logging: Boolean,
+    var extraData: ByteArray?
 ) : Packet() {
     override fun read(buf: ByteBuf) {
         logging = buf.readBoolean()
@@ -38,6 +40,15 @@ class ChatPacket(
             .toString(Charsets.UTF_8)
             .replace("ª™ª", "$")
             .replace("ª•ª", "\\")
+
+        val size = buf.readInt()
+        if (size > 0) {
+            val compressedData = ByteArray(size)
+            buf.readBytes(compressedData)
+            extraData = compressedData.decompress()
+        } else {
+            extraData = null
+        }
     }
 
     override fun write(buf: ByteBuf) {
@@ -56,5 +67,13 @@ class ChatPacket(
         val bytes = jsonText.toByteArray(Charsets.UTF_8)
         buf.writeInt(bytes.size)
         buf.writeBytes(bytes)
+
+        if (extraData != null) {
+            val compressed = extraData!!.compress()
+            buf.writeInt(compressed.size)
+            buf.writeBytes(compressed)
+        } else {
+            buf.writeInt(0)
+        }
     }
 }

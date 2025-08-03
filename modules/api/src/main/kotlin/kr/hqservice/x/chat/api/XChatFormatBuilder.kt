@@ -1,8 +1,5 @@
-package kr.hqservice.x.chat.core.def.format
+package kr.hqservice.x.chat.api
 
-import kr.hqservice.x.chat.api.XChatData
-import kr.hqservice.x.chat.api.XChatFormat
-import kr.hqservice.x.chat.api.XChatSender
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEventSource
@@ -11,8 +8,9 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 
-class DefaultFormatBuilder {
+class XChatFormatBuilder {
     private var color: Int = 0xffffff
+    private var prefixColor: Int? = null
     private var prefix: String = ""
     private var displayNameFormat: (XChatData) -> String = { data -> data.getSender().getDisplayName() }
     private var separator: String = ": "
@@ -22,37 +20,42 @@ class DefaultFormatBuilder {
 
     private var receiveEvent: ((XChatSender, Player) -> Unit)? = null
 
-    fun setColor(color: Int): DefaultFormatBuilder {
+    fun setColor(color: Int): XChatFormatBuilder {
         this.color = color
         return this
     }
 
-    fun setPrefix(prefix: String): DefaultFormatBuilder {
+    fun setPrefixColor(prefixColor: Int?): XChatFormatBuilder {
+        this.prefixColor = prefixColor
+        return this
+    }
+
+    fun setPrefix(prefix: String): XChatFormatBuilder {
         this.prefix = prefix
         return this
     }
 
-    fun setAfterPrefix(format: (XChatData) -> String): DefaultFormatBuilder {
+    fun setAfterPrefix(format: (XChatData) -> String): XChatFormatBuilder {
         this.displayNameFormat = format
         return this
     }
 
-    fun setSeparator(separator: String): DefaultFormatBuilder {
+    fun setSeparator(separator: String): XChatFormatBuilder {
         this.separator = separator
         return this
     }
 
-    fun setHover(hoverEvent: ((XChatData) -> HoverEventSource<*>)?): DefaultFormatBuilder {
+    fun setHover(hoverEvent: ((XChatData) -> HoverEventSource<*>)?): XChatFormatBuilder {
         this.hover = hoverEvent
         return this
     }
 
-    fun setClick(click: ((XChatData) -> ClickEvent)?): DefaultFormatBuilder {
+    fun setClick(click: ((XChatData) -> ClickEvent)?): XChatFormatBuilder {
         this.click = click
         return this
     }
 
-    fun setReceiveEvent(receiveEvent: (XChatSender, Player) -> Unit): DefaultFormatBuilder {
+    fun setReceiveEvent(receiveEvent: (XChatSender, Player) -> Unit): XChatFormatBuilder {
         this.receiveEvent = receiveEvent
         return this
     }
@@ -74,7 +77,9 @@ class DefaultFormatBuilder {
 
             override fun format(xChatData: XChatData): Component {
                 val base = Component.text()
-                base.append(Component.text(prefix))
+                val prefix = Component.text(prefix)
+                if (prefixColor != null) prefix.color(TextColor.color(prefixColor!!))
+                base.append(prefix)
                 base.append(Component.text(xChatData.run(displayNameFormat)))
                 base.append(Component.text(separator))
                 base.append(xChatData.getMessage())

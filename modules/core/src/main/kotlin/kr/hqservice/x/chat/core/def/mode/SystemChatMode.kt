@@ -5,13 +5,13 @@ import kr.hqservice.x.chat.api.XChatFormat
 import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.chat.api.service.XChatService
-import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
+import kr.hqservice.x.chat.api.XChatFormatBuilder
 
 @Component
 class SystemChatMode(
     private val xChatService: XChatService
 ) : XChatMode {
-    private val format = DefaultFormatBuilder()
+    private val format = XChatFormatBuilder()
         .setColor(0xdbdbce)
         .setSeparator(" ")
         .build()

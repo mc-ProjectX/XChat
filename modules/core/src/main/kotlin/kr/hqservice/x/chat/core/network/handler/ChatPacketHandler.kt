@@ -50,7 +50,8 @@ class ChatPacketHandler(
         nettyServer.registerOuterPacket(ChatPacket::class)
         nettyServer.registerInnerPacket(ChatPacket::class) { packet , _ ->
             val mode = xChatService.findChatMode(packet.mode) ?: return@registerInnerPacket
-            val filter = mode.getReceiverFilter(packet.sender)
+            val extra = packet.extraData
+            val filter = mode.getReceiverFilter(packet.sender, extra?.let(mode::readExtraData))
             val singleReceiver = packet.singleReceiver
             val receivers = if (singleReceiver != null) {
                 server

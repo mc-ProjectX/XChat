@@ -4,7 +4,7 @@ import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.XChatFormat
 import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
-import kr.hqservice.x.chat.core.def.format.DefaultFormatBuilder
+import kr.hqservice.x.chat.api.XChatFormatBuilder
 import kr.hqservice.x.core.api.XPlayer
 import org.bukkit.Server
 
@@ -12,7 +12,7 @@ import org.bukkit.Server
 class OperatorChatMode(
     private val server: Server
 ) : XChatMode {
-    private val format = DefaultFormatBuilder()
+    private val format = XChatFormatBuilder()
         .setPrefix("[관리자] ")
         .setColor(0xff5792).build()
 
@@ -28,7 +28,7 @@ class OperatorChatMode(
         return server.operators.any { it.uniqueId == sender.getUniqueId() }
     }
 
-    override fun getReceiverFilter(sender: XChatSender): (XPlayer) -> Boolean {
+    override fun getReceiverFilter(sender: XChatSender, extraData: Any?): (XPlayer) -> Boolean {
         return { receiver -> server.operators.any { receiver.getUniqueId() == it.uniqueId } }
     }
 }

@@ -12,6 +12,8 @@ import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.ChatColor
+import org.bukkit.ChatColor.stripColor
 import org.bukkit.Server
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -24,14 +26,14 @@ class RegionChatMode(
 ) : XChatModeWithSpy {
     private val format = XChatFormatBuilder()
         // Server Front
-        .setPrefix("䰴")
+        .setPrefix("䰴 ")
         .setPrefixColor(0xffffff)
 
-        .setColor(0xebd2b2)
+        .setColor(0xeeaa23)
         .setHover {
             val text = net.kyori.adventure.text.Component.text()
             text.append(net.kyori.adventure.text.Component.text(
-                "보낸 유저: ${if (it.getSender().getDisplayName() != it.getSender().getOriginalName()) "${it.getSender().getDisplayName()}(${it.getSender().getOriginalName()})" else it.getSender().getOriginalName()}\n" +
+                "보낸 유저: ${it.getSender().getOriginalName()}\n" +
                 "수신 받은 시간: ${LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))}\n" +
                 "\n" +
                 "클릭 하여 귓속말을 보낼 수 있습니다."
@@ -40,14 +42,14 @@ class RegionChatMode(
             HoverEvent.showText(text)
         }
         .setClick {
-            ClickEvent.suggestCommand("/귓 ${it.getSender().getDisplayName()} ")
+            ClickEvent.suggestCommand("/귓 ${it.getSender().getDisplayName().run(ChatColor::stripColor)!!} ")
         }.build()
 
     private val spyFormat = XChatFormatBuilder()
         .setHover {
             val text = net.kyori.adventure.text.Component.text()
             text.append(net.kyori.adventure.text.Component.text(
-                "보낸 유저: ${if (it.getSender().getDisplayName() != it.getSender().getOriginalName()) "${it.getSender().getDisplayName()}(${it.getSender().getOriginalName()})" else it.getSender().getOriginalName()}" +
+                "보낸 유저: ${it.getSender().getOriginalName()}" +
                 " [${xCoreService.getServer().findPlayer(it.getSender().getUniqueId())?.getChannel()?.getChannelName()}]\n" +
                 "수신 받은 시간: ${LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))}"
             ))

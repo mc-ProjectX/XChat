@@ -6,4 +6,6 @@ enum class DefaultChatMode {
     INFO,
     WHISPER_SENDER,
     WHISPER_RECEIVER,
+    SPEAKER,
+    ITEM_SPEAKER
 }

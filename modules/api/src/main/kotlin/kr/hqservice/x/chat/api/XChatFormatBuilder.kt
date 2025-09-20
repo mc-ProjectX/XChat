@@ -6,13 +6,14 @@ import net.kyori.adventure.text.event.HoverEventSource
 import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import org.bukkit.entity.Player
 
 class XChatFormatBuilder {
     private var color: Int = 0xffffff
     private var prefixColor: Int? = null
     private var prefix: String = ""
-    private var displayNameFormat: (XChatData) -> String = { data -> data.getSender().getDisplayName() }
+    private var afterPrefixFormat: ((XChatData) -> String)? = null
     private var separator: String = ": "
 
     private var hover: ((XChatData) -> HoverEventSource<*>)? = null
@@ -36,7 +37,7 @@ class XChatFormatBuilder {
     }
 
     fun setAfterPrefix(format: (XChatData) -> String): XChatFormatBuilder {
-        this.displayNameFormat = format
+        this.afterPrefixFormat = format
         return this
     }
 
@@ -80,7 +81,17 @@ class XChatFormatBuilder {
                 var prefix = Component.text(prefix)
                 if (prefixColor != null) prefix = prefix.style(Style.style(TextColor.color(prefixColor!!)))
                 base.append(prefix)
-                base.append(Component.text(xChatData.run(displayNameFormat)))
+                if (afterPrefixFormat != null) {
+                    base.append(Component.text(afterPrefixFormat!!.invoke(xChatData)))
+                } else {
+                    if (xChatData.getSender().getPrefix().isNotEmpty()) {
+                        val prefixComponent =
+                            LegacyComponentSerializer.legacySection().deserialize(xChatData.getSender().getPrefix())
+                        base.append(prefixComponent)
+                    }
+                    val nameComponent = LegacyComponentSerializer.legacySection().deserialize(xChatData.getSender().getDisplayName())
+                    base.append(nameComponent)
+                }
                 base.append(Component.text(separator))
                 base.append(xChatData.getMessage())
                 base.style(style)

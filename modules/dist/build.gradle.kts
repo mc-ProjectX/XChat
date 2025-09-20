@@ -11,6 +11,7 @@ bukkitResourceGenerator {
     name = "${extra["projectName"]}"
     apiVersion = "1.13"
     depend = listOf("HQFramework", "XCore")
+    softDepend = listOf("Vault")
     libraries = excludedRuntimeDependencies()
 
     permissions.apply {
@@ -26,10 +27,28 @@ bukkitResourceGenerator {
     }
 
     commands.apply {
+        create("확성기").apply {
+            description = "확성기를 사용하여 메시지를 보냅니다."
+            usage = "/확성기 <메시지>"
+        }
+
+        create("자랑").apply {
+            description = "손에 든 아이템을 자랑할 수 있습니다."
+        }
+
         create("귓").apply {
             description = "귓속말을 보낼 수 있습니다."
             usage = "/귓 <닉네임> <메시지>"
             aliases = listOf("귓속말", "귓말", "w", "rnlt", "rnltthrakf", "rnltakf")
+        }
+
+        create("채팅차단").apply {
+            description = "해당 유저의 채팅을 차단/해제 합니다."
+            usage = "/채팅차단 <닉네임>"
+        }
+
+        create("전쳇차단").apply {
+            description = "전체 채팅을 차단/해제 합니다."
         }
 
         create("답장").apply {

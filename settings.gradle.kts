@@ -13,12 +13,15 @@ dependencyResolutionManagement {
     repositories {
         maven("https://maven.hqservice.kr/repository/maven-public")
         maven("https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     }
 
     versionCatalogs {
         create("libs") {
             library("spigot-api", "org.spigotmc:spigot-api:${getProperty("spigotVersion")}")
             library("paper-api", "io.papermc.paper:paper-api:${getProperty("spigotVersion")}")
+            library("placeholder", "me.clip:placeholderapi:${getProperty("placeholdersVersion")}")
+            library("vault", "com.github.MilkBowl:VaultAPI:${getProperty("vaultVersion")}")
         }
         create("framework") {
             library("core", "kr.hqservice:hqframework-bukkit-core:${getProperty("hqFrameworkVersion")}")
@@ -29,7 +32,8 @@ dependencyResolutionManagement {
             library("scheduler", "kr.hqservice:hqframework-bukkit-scheduler:${getProperty("hqFrameworkVersion")}")
         }
         create("projectX") {
-            library("core", "kr.hqservice.x:xcore:${getProperty("xCoreVersion")}")
+            library("core", "kr.hqservice.x:xcore-api:${getProperty("xCoreVersion")}")
+            library("core_prefix", "kr.hqservice.x:xcore-prefix:${getProperty("xCoreVersion")}")
         }
     }
 }

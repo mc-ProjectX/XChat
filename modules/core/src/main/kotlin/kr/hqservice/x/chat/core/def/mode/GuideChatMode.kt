@@ -14,10 +14,10 @@ class GuideChatMode(
 ) : XChatMode {
     private val format = XChatFormatBuilder()
         // Server Front
-        .setPrefix("铭")
+        .setPrefix("铭 ")
         .setPrefixColor(0xffffff)
 
-        .setColor(0xffe97d).build()
+        .setColor(0xcd9cff).build()
 
     override fun getKey(): String {
         return "guide"

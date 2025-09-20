@@ -31,7 +31,7 @@ class WhisperReceiveChatMode(
         .setHover {
             val text = net.kyori.adventure.text.Component.text()
             text.append(net.kyori.adventure.text.Component.text(
-                "보낸 유저: ${if (it.getSender().getDisplayName() != it.getSender().getOriginalName()) "${it.getSender().getDisplayName()}(${it.getSender().getOriginalName()})" else it.getSender().getOriginalName()}\n" +
+                "보낸 유저: ${it.getSender().getOriginalName()}\n" +
                         "수신 받은 시간: ${LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))}\n" +
                         "\n" +
                         "클릭 하여 귓속말을 보낼 수 있습니다."
@@ -57,9 +57,9 @@ class WhisperReceiveChatMode(
             it as XChatWhisperData
             val text = net.kyori.adventure.text.Component.text()
             text.append(net.kyori.adventure.text.Component.text(
-                "보낸 유저: ${if (it.getSender().getDisplayName() != it.getSender().getOriginalName()) "${it.getSender().getDisplayName()}(${it.getSender().getOriginalName()})" else it.getSender().getOriginalName()}" +
+                "보낸 유저: ${it.getSender().getOriginalName()}" +
                 " [${xCoreService.getServer().findPlayer(it.getSender().getUniqueId())?.getChannel()?.getChannelName()}]\n" +
-                "받은 유저: ${if (it.getReceiver().getDisplayName() != it.getReceiver().getName()) "${it.getReceiver().getDisplayName()}(${it.getReceiver().getName()})" else it.getReceiver().getName()}" +
+                "받은 유저: ${it.getReceiver().getName()}" +
                 " [${xCoreService.getServer().findPlayer(it.getReceiver().getUniqueId())?.getChannel()?.getChannelName()}]\n" +
                 "수신 받은 시간: ${LocalDateTime.now().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))}"
             ))

@@ -8,9 +8,9 @@ import kr.hqservice.framework.netty.packet.extension.readString
 import kr.hqservice.framework.netty.packet.extension.readUUID
 import kr.hqservice.framework.netty.packet.extension.writeString
 import kr.hqservice.framework.netty.packet.extension.writeUUID
-import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.XChatSender
-import kr.hqservice.x.chat.core.XChatSenderImpl
+import kr.hqservice.x.chat.core.XChatItemSender
+import kr.hqservice.x.chat.core.XChatPlayerSender
 import java.util.UUID
 
 class ChatPacket(
@@ -24,11 +24,20 @@ class ChatPacket(
     override fun read(buf: ByteBuf) {
         logging = buf.readBoolean()
         mode = buf.readString()
-        sender = XChatSenderImpl(
-            buf.readUUID(),
-            buf.readString(),
-            buf.readString()
-        )
+
+        val senderId = buf.readInt()
+        val senderSize = buf.readInt()
+        val compressedSerializedSender = ByteArray(senderSize)
+        buf.readBytes(compressedSerializedSender)
+        val decompressedSender = compressedSerializedSender.decompress()
+        sender = when (senderId) {
+            0 -> XChatPlayerSender.fromByteArray(decompressedSender)
+            1 -> XChatItemSender.fromByteArray(decompressedSender)
+            else -> {
+                throw IllegalArgumentException("Unsupported sender type in ChatPacket")
+            }
+        }
+
         singleReceiver = if (buf.readBoolean())
             buf.readUUID()
         else null
@@ -37,6 +46,7 @@ class ChatPacket(
         val bytes = ByteArray(bytesLength)
         buf.readBytes(bytes)
         jsonMessage = bytes
+            .decompress()
             .toString(Charsets.UTF_8)
             .replace("ª™ª", "$")
             .replace("ª•ª", "\\")
@@ -54,9 +64,16 @@ class ChatPacket(
     override fun write(buf: ByteBuf) {
         buf.writeBoolean(logging)
         buf.writeString(mode)
-        buf.writeUUID(sender.getUniqueId())
-        buf.writeString(sender.getDisplayName())
-        buf.writeString(sender.getOriginalName())
+
+        val senderId = when (sender) {
+            is XChatPlayerSender -> 0
+            is XChatItemSender -> 1
+            else -> throw IllegalArgumentException("Unsupported sender type: ${sender::class.java.name}")
+        }
+        buf.writeInt(senderId)
+        val serializedSender = sender.toByteArray().compress()
+        buf.writeInt(serializedSender.size)
+        buf.writeBytes(serializedSender)
 
         buf.writeBoolean(singleReceiver != null)
         singleReceiver?.let { buf.writeUUID(it) }
@@ -64,7 +81,9 @@ class ChatPacket(
             .replace("$", "ª™ª")
             .replace("\\", "ª•ª")
 
-        val bytes = jsonText.toByteArray(Charsets.UTF_8)
+        val bytes = jsonText
+            .toByteArray(Charsets.UTF_8)
+            .compress()
         buf.writeInt(bytes.size)
         buf.writeBytes(bytes)
 

@@ -3,8 +3,8 @@ package kr.hqservice.x.chat.api.service
 import kr.hqservice.x.chat.api.XChatMode
 import kr.hqservice.x.chat.api.DefaultChatMode
 import kr.hqservice.x.chat.api.XChatSender
-import kr.hqservice.x.core.api.XPlayer
 import net.kyori.adventure.text.Component
+import org.bukkit.inventory.ItemStack
 import java.util.*
 
 interface XChatService {
@@ -25,6 +25,8 @@ interface XChatService {
     fun sendChat(targetId: UUID?, senderId: UUID, chat: Component, xChatMode: XChatMode, logging: Boolean = true): Boolean
 
     fun sendChat(targetId: UUID?, sender: XChatSender, chat: String, xChatMode: XChatMode, logging: Boolean = true): Boolean
+
+    fun sendChat(targetId: UUID?, sender: XChatSender, item: ItemStack, xChatMode: XChatMode, logging: Boolean = true): Boolean
 
     fun sendChat(targetId: UUID?, sender: XChatSender, chat: Component, xChatMode: XChatMode, logging: Boolean = true): Boolean
 }

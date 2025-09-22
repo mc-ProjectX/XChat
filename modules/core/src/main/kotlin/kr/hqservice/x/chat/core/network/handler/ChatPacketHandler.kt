@@ -4,18 +4,15 @@ import kr.hqservice.framework.bukkit.core.component.module.Module
 import kr.hqservice.framework.bukkit.core.component.module.Setup
 import kr.hqservice.framework.netty.api.NettyServer
 import kr.hqservice.x.chat.api.XChatModeWithSpy
-import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.chat.api.service.XChatUserService
 import kr.hqservice.x.chat.core.XChatDataImpl
-import kr.hqservice.x.chat.core.XChatPlayerSender
 import kr.hqservice.x.chat.core.XChatWhisperData
 import kr.hqservice.x.chat.core.def.mode.ItemSpeakerMode
 import kr.hqservice.x.chat.core.def.mode.SpeakerMode
 import kr.hqservice.x.chat.core.def.mode.WhisperReceiveChatMode
 import kr.hqservice.x.chat.core.network.packet.ChatClearPacket
 import kr.hqservice.x.chat.core.network.packet.ChatPacket
-import kr.hqservice.x.chat.core.server.nyang.service.ChatDeniedService
 import kr.hqservice.x.core.api.service.XCoreService
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.Style
@@ -37,8 +34,6 @@ class ChatPacketHandler(
     private val xCoreService: XCoreService,
     private val xChatService: XChatService,
     private val xChatUserService: XChatUserService,
-
-    private val chatDeniedService: ChatDeniedService
 ) {
     @Setup
     fun setup() {
@@ -69,7 +64,6 @@ class ChatPacketHandler(
                     .onlinePlayers
                     .mapNotNull { xCoreService.getServer().findPlayer(it.uniqueId) }
                     .filter(filter)
-                    .filter { chatDeniedService.getCache(it.getUniqueId())?.targets?.contains(packet.sender.getUniqueId()) == false }
                     .filter {
                         if (mode is kr.hqservice.x.chat.core.def.mode.DefaultChatMode) {
                             xChatUserService.getMuteEndAt(it.getUniqueId()) == null

@@ -1,12 +1,11 @@
-package kr.hqservice.x.chat.core.server.nyang
+package kr.hqservice.x.chat.core.hook
 
 import kr.hqservice.framework.bukkit.core.component.module.Module
 import kr.hqservice.framework.bukkit.core.component.module.Setup
-import kr.hqservice.x.chat.core.server.nyang.hook.PlaceHolderHook
 
 @Module
-class NyangModule(
-    val hook: PlaceHolderHook
+class PlaceholderModule(
+    val hook: PlaceholderHook
 ) {
     @Setup
     fun setup() {

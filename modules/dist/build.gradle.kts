@@ -62,10 +62,10 @@ bukkitResourceGenerator {
             aliases = listOf("wjscpcoxld", "전챗", "wjscpt")
         }
 
-        create("지역채팅").apply {
+        /*create("지역채팅").apply {
             description = "지역 채팅 모드로 전환합니다."
             aliases = listOf("wldurcoxld","wlcot","지챗")
-        }
+        }*/
 
         create("관리자채팅").apply {
             description = "관리자 채팅 모드로 전환합니다."
@@ -73,11 +73,11 @@ bukkitResourceGenerator {
             permission = "op"
         }
 
-        create("가이드채팅").apply {
+        /*create("가이드채팅").apply {
             description = "가이드 채팅 모드로 전환합니다."
             aliases = listOf("guidechat")
             permission = "project_x.group.guide"
-        }
+        }*/
 
         create("스파이").apply {
             description = "스파이 모드로 전환합니다."

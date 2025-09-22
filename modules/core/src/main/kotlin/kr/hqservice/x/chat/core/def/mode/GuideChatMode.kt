@@ -7,6 +7,7 @@ import kr.hqservice.x.chat.api.XChatSender
 import kr.hqservice.x.chat.api.XChatFormatBuilder
 import kr.hqservice.x.core.api.XPlayer
 import org.bukkit.Server
+/*
 
 @Component
 class GuideChatMode(
@@ -35,4 +36,4 @@ class GuideChatMode(
         return { receiver -> server.operators.any { receiver.getUniqueId() == it.uniqueId }
                 || server.getPlayer(receiver.getUniqueId())?.hasPermission("project_x.group.guide") == true }
     }
-}
+}*/

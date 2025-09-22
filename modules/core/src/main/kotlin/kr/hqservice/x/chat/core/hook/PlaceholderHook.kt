@@ -1,4 +1,4 @@
-package kr.hqservice.x.chat.core.server.nyang.hook
+package kr.hqservice.x.chat.core.hook
 
 import kr.hqservice.framework.global.core.component.Bean
 import kr.hqservice.x.chat.core.service.PlayerChatModeService
@@ -6,7 +6,7 @@ import me.clip.placeholderapi.expansion.PlaceholderExpansion
 import org.bukkit.OfflinePlayer
 
 @Bean
-class PlaceHolderHook(
+class PlaceholderHook(
     private val xChatModeService: PlayerChatModeService
 ) : PlaceholderExpansion() {
 

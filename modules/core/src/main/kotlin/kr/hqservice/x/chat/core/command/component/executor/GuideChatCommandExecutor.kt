@@ -8,6 +8,7 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 
+/*
 @Component
 class GuideChatCommandExecutor(
     private val xChatService: XChatService,
@@ -29,4 +30,4 @@ class GuideChatCommandExecutor(
         }
         return true
     }
-}
+}*/

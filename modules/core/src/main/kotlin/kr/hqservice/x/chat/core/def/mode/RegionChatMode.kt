@@ -18,6 +18,7 @@ import org.bukkit.Server
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+/*
 
 @Component
 class RegionChatMode(
@@ -79,4 +80,4 @@ class RegionChatMode(
             } else false
         }
     }
-}
+}*/

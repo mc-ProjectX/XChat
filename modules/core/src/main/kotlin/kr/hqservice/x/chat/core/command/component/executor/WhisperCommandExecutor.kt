@@ -9,7 +9,6 @@ import kr.hqservice.framework.global.core.component.Component
 import kr.hqservice.x.chat.api.DefaultChatMode
 import kr.hqservice.x.chat.api.service.XChatService
 import kr.hqservice.x.chat.core.command.component.BukkitCommandComponent
-import kr.hqservice.x.chat.core.server.nyang.service.ChatDeniedService
 import kr.hqservice.x.core.api.service.XCoreService
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.HoverEvent
@@ -26,8 +25,6 @@ import java.util.*
 @Component
 class WhisperCommandExecutor(
     private val coroutineScope: CoroutineScope,
-    private val chatDeniedService: ChatDeniedService,
-
     private val xCoreService: XCoreService,
     private val xChatService: XChatService
 ) : BukkitCommandComponent {
@@ -69,18 +66,6 @@ class WhisperCommandExecutor(
                     }
 
                     coroutineScope.launch(Dispatchers.BukkitAsync) {
-                        if (!sender.isOp && !sender.hasPermission("project_x.group.guide")) {
-                            if (chatDeniedService.isDenied(sender.uniqueId, targetXPlayer.getUniqueId())) {
-                                xChatService.sendError(sender.uniqueId, "해당 플레이어가 귓속말을 차단했습니다.")
-                                return@launch
-                            }
-
-                            if (chatDeniedService.isDenied(targetXPlayer.getUniqueId(), sender.uniqueId)) {
-                                xChatService.sendError(sender.uniqueId, "차단한 유저에게 귓속말을 보낼 수 없습니다.")
-                                return@launch
-                            }
-                        }
-
                         if (sender.hasPermission("project_x.group.guide")) {
                             val regex = Regex("(\\[/[^\\]]*])|([^\\[]+|\\[(?!/)|])")
                             val newComponent = net.kyori.adventure.text.Component.text()
